@@ -57,7 +57,7 @@ export async function fetchProfile(): Promise<Profile | null> {
   if (!data) {
     const { data: created, error: insertError } = await supabase
       .from("profiles")
-      .insert({ id: user.id, email: user.email, name: user.email?.split("@")[0] ?? null })
+      .insert({ id: user.id, email: user.email ?? null, name: user.email?.split("@")[0] ?? null })
       .select("*")
       .single();
     if (insertError) throw insertError;

@@ -40,8 +40,8 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
       "Content-Type": "application/json",
       ...(options.accessToken ? { Authorization: `Bearer ${options.accessToken}` } : {}),
     },
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    signal: options.signal,
+    ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
+    ...(options.signal ? { signal: options.signal } : {}),
   });
 
   if (!response.ok) {
