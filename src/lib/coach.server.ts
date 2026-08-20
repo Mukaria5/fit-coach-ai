@@ -6,7 +6,8 @@ import { createLovableAiGatewayProvider } from "./ai-gateway.server";
 import { dailyScore, formatSleep, targetsFromProfile, todayISO } from "./score";
 import type { DailyLog, Profile } from "@/types";
 
-type Client = SupabaseClient<never, never, never>;
+// Accept any Supabase client shape (generated Database types or untyped).
+type Client = SupabaseClient<any, any, any>;
 
 export const coachResponseSchema = z.object({
   reply: z.string(),
