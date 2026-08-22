@@ -85,7 +85,7 @@ function ProfilePage() {
   }
 
   return (
-    <AppShell title="Profile" subtitle={profile.email ?? undefined}>
+    <AppShell title="Profile" subtitle={profile.email ?? "Your settings"}>
       <div className="space-y-4">
         <section className="surface p-5">
           <h2 className="text-base font-semibold">Daily targets</h2>
