@@ -14,8 +14,10 @@ import {
 } from "@/services/auth";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    mode: search.mode === "signin" ? ("signin" as const) : ("signup" as const),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { mode?: "signin" | "signup" | undefined } => ({
+    mode: search["mode"] === "signin" ? "signin" : search["mode"] === "signup" ? "signup" : undefined,
   }),
   head: () => ({
     meta: [
