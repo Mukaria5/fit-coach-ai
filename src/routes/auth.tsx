@@ -16,7 +16,7 @@ import {
 export const Route = createFileRoute("/auth")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { mode?: "signin" | "signup" } => ({
+  ): { mode?: "signin" | "signup" | undefined } => ({
     mode: search["mode"] === "signin" ? "signin" : search["mode"] === "signup" ? "signup" : undefined,
   }),
   head: () => ({
