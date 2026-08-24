@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -45,6 +47,24 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [awaitingConfirm, setAwaitingConfirm] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setTimeout(() => setCooldown((value) => value - 1), 1000);
+    return () => clearTimeout(id);
+  }, [cooldown]);
+
+  const goToApp = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) return;
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarded")
+      .eq("id", data.user.id)
+      .maybeSingle();
+    await navigate({ to: profile?.onboarded ? "/home" : "/onboarding" });
+  };
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -54,7 +74,7 @@ function AuthPage() {
         const data = await signUpWithEmail(email, password, name);
         if (!data.session) {
           setAwaitingConfirm(true);
-          toast.success("Check your email to confirm your account.");
+          setCooldown(45);
           return;
         }
         toast.success("Account created — let's set up your plan.");
@@ -62,13 +82,54 @@ function AuthPage() {
         return;
       }
       await signInWithEmail(email, password);
-      await navigate({ to: "/home" });
+      await goToApp();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Authentication failed");
     } finally {
       setBusy(false);
     }
   };
+
+  const resend = async () => {
+    if (cooldown > 0) return;
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: { emailRedirectTo: window.location.origin },
+      });
+      if (error) throw error;
+      setCooldown(45);
+      toast.success("Confirmation email sent again");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Could not resend the confirmation email",
+      );
+    }
+  };
+
+  const confirmedCheck = async () => {
+    if (!password) {
+      setAwaitingConfirm(false);
+      setIsSignUp(false);
+      return;
+    }
+    setBusy(true);
+    try {
+      await signInWithEmail(email, password);
+      await goToApp();
+    } catch {
+      toast.error("Not confirmed yet — open the link in your inbox, then try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const maskedEmail = (() => {
+    const [local = "", domain = ""] = email.split("@");
+    const visible = local.slice(0, 2);
+    return `${visible}${"•".repeat(Math.max(local.length - 2, 2))}@${domain}`;
+  })();
 
   const google = async () => {
     try {
