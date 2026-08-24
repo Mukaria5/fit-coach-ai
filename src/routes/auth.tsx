@@ -179,6 +179,7 @@ function AuthPage() {
           ) : null}
         </div>
       </div>
+      )}
     </div>
   );
 }
