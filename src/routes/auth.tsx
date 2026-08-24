@@ -44,17 +44,24 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [awaitingConfirm, setAwaitingConfirm] = useState(false);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setBusy(true);
     try {
       if (isSignUp) {
-        await signUpWithEmail(email, password, name);
+        const data = await signUpWithEmail(email, password, name);
+        if (!data.session) {
+          setAwaitingConfirm(true);
+          toast.success("Check your email to confirm your account.");
+          return;
+        }
         toast.success("Account created — let's set up your plan.");
-      } else {
-        await signInWithEmail(email, password);
+        await navigate({ to: "/onboarding" });
+        return;
       }
+      await signInWithEmail(email, password);
       await navigate({ to: "/home" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Authentication failed");
@@ -93,11 +100,31 @@ function AuthPage() {
         <ThemeToggle />
       </header>
 
+      {awaitingConfirm ? (
+        <div className="mx-auto w-full max-w-sm flex-1 px-5 pt-10 text-center">
+          <h1 className="text-2xl font-semibold">Confirm your email</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We sent a confirmation link to <span className="text-foreground">{email}</span>. Open it to
+            activate your account, then sign in to start your plan.
+          </p>
+          <Button
+            variant="outline"
+            className="mt-6 w-full"
+            onClick={() => {
+              setAwaitingConfirm(false);
+              setIsSignUp(false);
+            }}
+          >
+            Back to sign in
+          </Button>
+        </div>
+      ) : (
       <div className="mx-auto w-full max-w-sm flex-1 px-5 pt-6">
         <h1 className="text-2xl font-semibold">{isSignUp ? "Create your account" : "Welcome back"}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {isSignUp ? "Two minutes to set up your daily plan." : "Pick up where your streak left off."}
         </p>
+
 
         <Button variant="outline" className="mt-6 w-full" onClick={google}>
           Continue with Google
@@ -152,6 +179,7 @@ function AuthPage() {
           ) : null}
         </div>
       </div>
+      )}
     </div>
   );
 }
