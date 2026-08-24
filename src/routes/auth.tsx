@@ -44,17 +44,24 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [awaitingConfirm, setAwaitingConfirm] = useState(false);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setBusy(true);
     try {
       if (isSignUp) {
-        await signUpWithEmail(email, password, name);
+        const data = await signUpWithEmail(email, password, name);
+        if (!data.session) {
+          setAwaitingConfirm(true);
+          toast.success("Check your email to confirm your account.");
+          return;
+        }
         toast.success("Account created — let's set up your plan.");
-      } else {
-        await signInWithEmail(email, password);
+        await navigate({ to: "/onboarding" });
+        return;
       }
+      await signInWithEmail(email, password);
       await navigate({ to: "/home" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Authentication failed");
