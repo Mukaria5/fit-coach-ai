@@ -55,6 +55,22 @@ function AuthPage() {
     return () => clearTimeout(id);
   }, [cooldown]);
 
+  // Expired / invalid confirmation links come back with an error in the URL hash.
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    const code = params.get("error_code");
+    const description = params.get("error_description");
+    if (!code && !description) return;
+    toast.error(
+      code === "otp_expired"
+        ? "That confirmation link expired. Enter your email below and we'll send a fresh one."
+        : (description ?? "That confirmation link is no longer valid. Request a new one below."),
+    );
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  }, []);
+
   const goToApp = async () => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
@@ -162,22 +178,44 @@ function AuthPage() {
       </header>
 
       {awaitingConfirm ? (
-        <div className="mx-auto w-full max-w-sm flex-1 px-5 pt-10 text-center">
-          <h1 className="text-2xl font-semibold">Confirm your email</h1>
+        <div className="mx-auto w-full max-w-sm flex-1 px-5 pt-8 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-2xl">
+            ✉️
+          </div>
+          <h1 className="mt-5 text-2xl font-semibold">Check your email</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            We sent a confirmation link to <span className="text-foreground">{email}</span>. Open it to
-            activate your account, then sign in to start your plan.
+            We sent a verification link to{" "}
+            <span className="font-medium text-foreground">{maskedEmail}</span>. You must click that link
+            before you can sign in and start your plan.
           </p>
-          <Button
-            variant="outline"
-            className="mt-6 w-full"
+
+          <div className="mt-6 space-y-2.5">
+            <Button asChild className="w-full">
+              <a href="mailto:">Open email app</a>
+            </Button>
+            <Button className="w-full" variant="secondary" onClick={confirmedCheck} disabled={busy}>
+              {busy ? "Checking…" : "I've confirmed my email"}
+            </Button>
+            <Button variant="outline" className="w-full" onClick={resend} disabled={cooldown > 0}>
+              {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend confirmation email"}
+            </Button>
+          </div>
+
+          <p className="mt-5 text-xs text-muted-foreground">
+            Link expired or already used? Resend it above — older links stop working once a newer one is
+            sent.
+          </p>
+
+          <button
+            type="button"
+            className="mt-4 text-sm text-primary"
             onClick={() => {
               setAwaitingConfirm(false);
               setIsSignUp(false);
             }}
           >
             Back to sign in
-          </Button>
+          </button>
         </div>
       ) : (
       <div className="mx-auto w-full max-w-sm flex-1 px-5 pt-6">
