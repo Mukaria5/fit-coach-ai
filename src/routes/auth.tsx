@@ -55,6 +55,22 @@ function AuthPage() {
     return () => clearTimeout(id);
   }, [cooldown]);
 
+  // Expired / invalid confirmation links come back with an error in the URL hash.
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    const code = params.get("error_code");
+    const description = params.get("error_description");
+    if (!code && !description) return;
+    toast.error(
+      code === "otp_expired"
+        ? "That confirmation link expired. Enter your email below and we'll send a fresh one."
+        : (description ?? "That confirmation link is no longer valid. Request a new one below."),
+    );
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  }, []);
+
   const goToApp = async () => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
