@@ -219,6 +219,90 @@ export type Database = {
         }
         Relationships: []
       }
+      food_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      foods: {
+        Row: {
+          calories: number
+          carbs_g: number
+          category_slug: string
+          created_at: string
+          fat_g: number
+          fiber_g: number
+          good_for: string[]
+          id: string
+          local_names: string[]
+          name: string
+          notes: string | null
+          price_ksh: number | null
+          protein_g: number
+          serving_grams: number | null
+          serving_label: string
+          slug: string
+          tags: string[]
+        }
+        Insert: {
+          calories?: number
+          carbs_g?: number
+          category_slug: string
+          created_at?: string
+          fat_g?: number
+          fiber_g?: number
+          good_for?: string[]
+          id?: string
+          local_names?: string[]
+          name: string
+          notes?: string | null
+          price_ksh?: number | null
+          protein_g?: number
+          serving_grams?: number | null
+          serving_label: string
+          slug: string
+          tags?: string[]
+        }
+        Update: {
+          calories?: number
+          carbs_g?: number
+          category_slug?: string
+          created_at?: string
+          fat_g?: number
+          fiber_g?: number
+          good_for?: string[]
+          id?: string
+          local_names?: string[]
+          name?: string
+          notes?: string | null
+          price_ksh?: number | null
+          protein_g?: number
+          serving_grams?: number | null
+          serving_label?: string
+          slug?: string
+          tags?: string[]
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
@@ -249,6 +333,176 @@ export type Database = {
         }
         Relationships: []
       }
+      meal_plan_items: {
+        Row: {
+          calories: number
+          carbs_g: number
+          components: Json
+          cost_ksh: number | null
+          created_at: string
+          eaten: boolean
+          fat_g: number
+          fiber_g: number
+          id: string
+          meal_type: string
+          notes: string | null
+          plan_date: string
+          plan_id: string
+          protein_g: number
+          sort_order: number
+          time_slot: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          calories?: number
+          carbs_g?: number
+          components?: Json
+          cost_ksh?: number | null
+          created_at?: string
+          eaten?: boolean
+          fat_g?: number
+          fiber_g?: number
+          id?: string
+          meal_type: string
+          notes?: string | null
+          plan_date?: string
+          plan_id: string
+          protein_g?: number
+          sort_order?: number
+          time_slot?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          calories?: number
+          carbs_g?: number
+          components?: Json
+          cost_ksh?: number | null
+          created_at?: string
+          eaten?: boolean
+          fat_g?: number
+          fiber_g?: number
+          id?: string
+          meal_type?: string
+          notes?: string | null
+          plan_date?: string
+          plan_id?: string
+          protein_g?: number
+          sort_order?: number
+          time_slot?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_plan_items_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "meal_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_plans: {
+        Row: {
+          budget_ksh: number | null
+          created_at: string
+          end_date: string | null
+          id: string
+          plan_type: string
+          start_date: string
+          summary: string | null
+          title: string
+          total_cost_ksh: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_ksh?: number | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          plan_type?: string
+          start_date?: string
+          summary?: string | null
+          title?: string
+          total_cost_ksh?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_ksh?: number | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          plan_type?: string
+          start_date?: string
+          summary?: string | null
+          title?: string
+          total_cost_ksh?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      meals: {
+        Row: {
+          calories: number
+          carbs_g: number
+          components: Json
+          cost_ksh: number | null
+          created_at: string
+          description: string | null
+          fat_g: number
+          fiber_g: number
+          good_for: string[]
+          id: string
+          meal_type: string
+          prep_minutes: number | null
+          protein_g: number
+          slug: string
+          tags: string[]
+          title: string
+        }
+        Insert: {
+          calories?: number
+          carbs_g?: number
+          components?: Json
+          cost_ksh?: number | null
+          created_at?: string
+          description?: string | null
+          fat_g?: number
+          fiber_g?: number
+          good_for?: string[]
+          id?: string
+          meal_type: string
+          prep_minutes?: number | null
+          protein_g?: number
+          slug: string
+          tags?: string[]
+          title: string
+        }
+        Update: {
+          calories?: number
+          carbs_g?: number
+          components?: Json
+          cost_ksh?: number | null
+          created_at?: string
+          description?: string | null
+          fat_g?: number
+          fiber_g?: number
+          good_for?: string[]
+          id?: string
+          meal_type?: string
+          prep_minutes?: number | null
+          protein_g?: number
+          slug?: string
+          tags?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
       measurements: {
         Row: {
           created_at: string
@@ -273,6 +527,105 @@ export type Database = {
           user_id?: string
           waist_cm?: number | null
           weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      nutrition_logs: {
+        Row: {
+          calories: number
+          carbs_g: number
+          cost_ksh: number | null
+          created_at: string
+          description: string
+          fat_g: number
+          fiber_g: number
+          food_slug: string | null
+          id: string
+          log_date: string
+          meal_type: string
+          protein_g: number
+          servings: number
+          source: string
+          user_id: string
+        }
+        Insert: {
+          calories?: number
+          carbs_g?: number
+          cost_ksh?: number | null
+          created_at?: string
+          description: string
+          fat_g?: number
+          fiber_g?: number
+          food_slug?: string | null
+          id?: string
+          log_date?: string
+          meal_type?: string
+          protein_g?: number
+          servings?: number
+          source?: string
+          user_id: string
+        }
+        Update: {
+          calories?: number
+          carbs_g?: number
+          cost_ksh?: number | null
+          created_at?: string
+          description?: string
+          fat_g?: number
+          fiber_g?: number
+          food_slug?: string | null
+          id?: string
+          log_date?: string
+          meal_type?: string
+          protein_g?: number
+          servings?: number
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      nutrition_preferences: {
+        Row: {
+          allergies: string[]
+          calorie_target: number | null
+          cooking_style: string
+          created_at: string
+          daily_budget_ksh: number
+          diet_type: string
+          dislikes: string[]
+          eating_schedule: string | null
+          meals_per_day: number
+          protein_target_g: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allergies?: string[]
+          calorie_target?: number | null
+          cooking_style?: string
+          created_at?: string
+          daily_budget_ksh?: number
+          diet_type?: string
+          dislikes?: string[]
+          eating_schedule?: string | null
+          meals_per_day?: number
+          protein_target_g?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allergies?: string[]
+          calorie_target?: number | null
+          cooking_style?: string
+          created_at?: string
+          daily_budget_ksh?: number
+          diet_type?: string
+          dislikes?: string[]
+          eating_schedule?: string | null
+          meals_per_day?: number
+          protein_target_g?: number | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -353,6 +706,88 @@ export type Database = {
           workout_minutes?: string | null
         }
         Relationships: []
+      }
+      shopping_list_items: {
+        Row: {
+          bought: boolean
+          category_slug: string | null
+          created_at: string
+          estimated_cost_ksh: number | null
+          id: string
+          list_id: string
+          name: string
+          quantity: string | null
+          user_id: string
+        }
+        Insert: {
+          bought?: boolean
+          category_slug?: string | null
+          created_at?: string
+          estimated_cost_ksh?: number | null
+          id?: string
+          list_id: string
+          name: string
+          quantity?: string | null
+          user_id: string
+        }
+        Update: {
+          bought?: boolean
+          category_slug?: string | null
+          created_at?: string
+          estimated_cost_ksh?: number | null
+          id?: string
+          list_id?: string
+          name?: string
+          quantity?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shopping_lists: {
+        Row: {
+          created_at: string
+          id: string
+          plan_id: string | null
+          title: string
+          total_cost_ksh: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          plan_id?: string | null
+          title?: string
+          total_cost_ksh?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          plan_id?: string | null
+          title?: string
+          total_cost_ksh?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_lists_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "meal_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workout_sessions: {
         Row: {
