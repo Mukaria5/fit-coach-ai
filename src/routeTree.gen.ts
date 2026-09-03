@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedChallengeRouteImport } from './routes/_authenticated/challenge'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedNutritionRouteImport } from './routes/_authenticated/nutrition'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
@@ -55,6 +56,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNutritionRoute = AuthenticatedNutritionRouteImport.update({
+  id: '/nutrition',
+  path: '/nutrition',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/challenge': typeof AuthenticatedChallengeRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/nutrition': typeof AuthenticatedNutritionRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/challenge': typeof AuthenticatedChallengeRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/nutrition': typeof AuthenticatedNutritionRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/_authenticated/challenge': typeof AuthenticatedChallengeRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/nutrition': typeof AuthenticatedNutritionRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/challenge'
     | '/coach'
     | '/home'
+    | '/nutrition'
     | '/onboarding'
     | '/profile'
     | '/progress'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/challenge'
     | '/coach'
     | '/home'
+    | '/nutrition'
     | '/onboarding'
     | '/profile'
     | '/progress'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/_authenticated/challenge'
     | '/_authenticated/coach'
     | '/_authenticated/home'
+    | '/_authenticated/nutrition'
     | '/_authenticated/onboarding'
     | '/_authenticated/profile'
     | '/_authenticated/progress'
@@ -212,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/nutrition': {
+      id: '/_authenticated/nutrition'
+      path: '/nutrition'
+      fullPath: '/nutrition'
+      preLoaderRoute: typeof AuthenticatedNutritionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -247,6 +266,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedChallengeRoute: typeof AuthenticatedChallengeRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedNutritionRoute: typeof AuthenticatedNutritionRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
@@ -257,6 +277,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChallengeRoute: AuthenticatedChallengeRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedNutritionRoute: AuthenticatedNutritionRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,

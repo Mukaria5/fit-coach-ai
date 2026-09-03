@@ -162,6 +162,8 @@ function ProfilePage() {
           </div>
         </section>
 
+        <NutritionPreferencesSection />
+
         <section className="surface p-5">
           <h2 className="text-base font-semibold">Demo data</h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -201,5 +203,144 @@ function ProfilePage() {
         </section>
       </div>
     </AppShell>
+  );
+}
+
+function NutritionPreferencesSection() {
+  const queryClient = useQueryClient();
+  const prefsQuery = useQuery({
+    queryKey: ["nutrition-preferences"],
+    queryFn: fetchNutritionPreferences,
+  });
+
+  const [budget, setBudget] = useState<string | null>(null);
+  const [meals, setMeals] = useState<string | null>(null);
+
+  const save = useMutation({
+    mutationFn: saveNutritionPreferences,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["nutrition-preferences"] });
+      await queryClient.invalidateQueries({ queryKey: ["nutrition-targets"] });
+      toast.success("Nutrition preferences saved");
+    },
+    onError: (error) => toast.error(error instanceof Error ? error.message : "Could not save"),
+  });
+
+  const prefs = prefsQuery.data;
+
+  return (
+    <section className="surface p-5">
+      <h2 className="text-base font-semibold">Nutrition preferences</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Used by the Kenyan meal planner and food logging.
+      </p>
+      {prefsQuery.isPending || !prefs ? (
+        <LoadingBlock />
+      ) : (
+        <>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="budget">Daily food budget (KSh)</Label>
+              <Input
+                id="budget"
+                type="number"
+                value={budget ?? String(prefs.daily_budget_ksh)}
+                onChange={(event) => setBudget(event.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="meals">Meals per day</Label>
+              <Input
+                id="meals"
+                type="number"
+                value={meals ?? String(prefs.meals_per_day)}
+                onChange={(event) => setMeals(event.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="diet">Diet type</Label>
+              <Input
+                id="diet"
+                defaultValue={prefs.diet_type}
+                onBlur={(event) => {
+                  if (event.target.value !== prefs.diet_type) {
+                    save.mutate({ diet_type: event.target.value });
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">omnivore, vegetarian, pescatarian…</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="cooking">Cooking style</Label>
+              <Input
+                id="cooking"
+                defaultValue={prefs.cooking_style}
+                onBlur={(event) => {
+                  if (event.target.value !== prefs.cooking_style) {
+                    save.mutate({ cooking_style: event.target.value });
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">home, kibanda, mixed</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="allergies">Allergies (comma separated)</Label>
+              <Input
+                id="allergies"
+                defaultValue={prefs.allergies.join(", ")}
+                onBlur={(event) =>
+                  save.mutate({
+                    allergies: event.target.value
+                      .split(",")
+                      .map((value) => value.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="dislikes">Foods to avoid</Label>
+              <Input
+                id="dislikes"
+                defaultValue={prefs.dislikes.join(", ")}
+                onBlur={(event) =>
+                  save.mutate({
+                    dislikes: event.target.value
+                      .split(",")
+                      .map((value) => value.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </div>
+            <div className="space-y-1.5 sm:col-span-2">
+              <Label htmlFor="schedule">Eating schedule</Label>
+              <Input
+                id="schedule"
+                placeholder="e.g. breakfast 7am, lunch 1pm, supper 8pm"
+                defaultValue={prefs.eating_schedule ?? ""}
+                onBlur={(event) => {
+                  if (event.target.value !== (prefs.eating_schedule ?? "")) {
+                    save.mutate({ eating_schedule: event.target.value || null });
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <Button
+            className="mt-4"
+            disabled={save.isPending}
+            onClick={() =>
+              save.mutate({
+                daily_budget_ksh: Number(budget ?? prefs.daily_budget_ksh),
+                meals_per_day: Number(meals ?? prefs.meals_per_day),
+              })
+            }
+          >
+            Save nutrition preferences
+          </Button>
+        </>
+      )}
+    </section>
   );
 }

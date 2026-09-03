@@ -249,8 +249,26 @@ export async function nutritionInsight(): Promise<string> {
   return result.insight;
 }
 
-export function sumMacros(rows: { calories: number; protein_g: number; carbs_g: number; fat_g: number; fiber_g: number; cost_ksh?: number | null }[]) {
-  return rows.reduce(
+export interface MacroTotals {
+  calories: number;
+  protein_g: number;
+  carbs_g: number;
+  fat_g: number;
+  fiber_g: number;
+  cost_ksh: number;
+}
+
+export function sumMacros(
+  rows: {
+    calories: number;
+    protein_g: number;
+    carbs_g: number;
+    fat_g: number;
+    fiber_g: number;
+    cost_ksh?: number | null;
+  }[],
+): MacroTotals {
+  return rows.reduce<MacroTotals>(
     (acc, row) => ({
       calories: acc.calories + Number(row.calories ?? 0),
       protein_g: acc.protein_g + Number(row.protein_g ?? 0),

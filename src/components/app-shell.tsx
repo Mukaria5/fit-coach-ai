@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Activity, Dumbbell, Home, MessageCircle, Trophy, User } from "lucide-react";
+import { Activity, Dumbbell, Home, MessageCircle, Salad, Trophy, User } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const navItems = [
   { to: "/home", label: "Home", icon: Home },
+  { to: "/nutrition", label: "Food", icon: Salad },
   { to: "/progress", label: "Progress", icon: Activity },
   { to: "/coach", label: "Coach", icon: MessageCircle },
   { to: "/challenge", label: "Challenge", icon: Trophy },
