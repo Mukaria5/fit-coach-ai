@@ -162,6 +162,8 @@ function ProfilePage() {
           </div>
         </section>
 
+        <NutritionPreferencesSection />
+
         <section className="surface p-5">
           <h2 className="text-base font-semibold">Demo data</h2>
           <p className="mt-1 text-sm text-muted-foreground">
