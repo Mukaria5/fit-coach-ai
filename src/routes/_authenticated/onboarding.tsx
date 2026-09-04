@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetchProfile, updateProfile } from "@/services/auth";
+import { saveNutritionPreferences } from "@/services/nutrition";
 import type { Profile } from "@/types";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
@@ -48,6 +49,11 @@ function Onboarding() {
     water_target_ml: 2500,
     steps_target: 8000,
     sleep_target_min: 450,
+    daily_budget_ksh: "400",
+    meals_per_day: "3",
+    diet_type: "omnivore",
+    cooking_style: "home",
+    eating_schedule: "",
   });
 
   useEffect(() => {
@@ -86,6 +92,13 @@ function Onboarding() {
         sleep_target_min: form.sleep_target_min,
         onboarded: true,
       };
+      await saveNutritionPreferences({
+        daily_budget_ksh: Number(form.daily_budget_ksh) || 400,
+        meals_per_day: Number(form.meals_per_day) || 3,
+        diet_type: form.diet_type,
+        cooking_style: form.cooking_style,
+        eating_schedule: form.eating_schedule || null,
+      });
       return updateProfile(patch);
     },
     onSuccess: async () => {
@@ -179,6 +192,50 @@ function Onboarding() {
           >
             I have gym or equipment access
           </button>
+        </div>
+      ),
+    },
+    {
+      title: "Food & budget",
+      body: (
+        <div className="space-y-5">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Daily food budget (KSh)">
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={form.daily_budget_ksh}
+                onChange={(e) => setForm({ ...form, daily_budget_ksh: e.target.value })}
+              />
+            </Field>
+            <Field label="Meals per day">
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={form.meals_per_day}
+                onChange={(e) => setForm({ ...form, meals_per_day: e.target.value })}
+              />
+            </Field>
+          </div>
+          <Choices
+            label="Diet type"
+            options={["omnivore", "vegetarian", "pescatarian", "halal"]}
+            value={form.diet_type}
+            onChange={(diet_type) => setForm({ ...form, diet_type })}
+          />
+          <Choices
+            label="How you usually eat"
+            options={["home", "kibanda", "mixed", "office"]}
+            value={form.cooking_style}
+            onChange={(cooking_style) => setForm({ ...form, cooking_style })}
+          />
+          <Field label="Eating schedule (optional)">
+            <Input
+              placeholder="e.g. chai 7am, lunch 1pm, supper 8pm"
+              value={form.eating_schedule}
+              onChange={(e) => setForm({ ...form, eating_schedule: e.target.value })}
+            />
+          </Field>
         </div>
       ),
     },
