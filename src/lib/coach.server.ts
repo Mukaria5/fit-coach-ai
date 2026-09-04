@@ -3,7 +3,7 @@ import type { Database } from "@/integrations/supabase/types";
 import { z } from "zod";
 import { generateText, Output } from "ai";
 
-import { createLovableAiGatewayProvider } from "./ai-gateway.server";
+import { aiModel, withAiErrorHandling } from "./ai/provider.server";
 import { dailyScore, formatSleep, targetsFromProfile, todayISO } from "./score";
 import type { DailyLog, Profile } from "@/types";
 
