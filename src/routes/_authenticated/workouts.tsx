@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Clock, Dumbbell, Flame, Play } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -43,6 +43,7 @@ function WorkoutsPage() {
   const [category, setCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const complete = useMutation({
     mutationFn: (workout: Workout) => completeWorkoutSession(workout),
@@ -51,7 +52,15 @@ function WorkoutsPage() {
         queryClient.invalidateQueries({ queryKey: ["workout-sessions"] }),
         queryClient.invalidateQueries({ queryKey: ["log"] }),
       ]);
-      toast.success("Workout logged");
+      toast.success("Workout logged", {
+        description: "Refuel: protein + carbs within an hour, e.g. ugali, sukuma wiki and two eggs.",
+        action: {
+          label: "Meal ideas",
+          onClick: () => {
+            void navigate({ to: "/nutrition" });
+          },
+        },
+      });
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : "Could not log"),
   });
