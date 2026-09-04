@@ -21,6 +21,7 @@ import {
 } from "@/lib/score";
 import { fetchProfile } from "@/services/auth";
 import { addWater, fetchLog, logSleep, logWalk, saveLog, setWorkoutDone, toggleNutrition } from "@/services/habits";
+import { fetchNutritionLogs, nutritionTargets, sumMacros } from "@/services/nutrition";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
