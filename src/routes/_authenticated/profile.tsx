@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { clearDemoHistory, loadDemoHistory } from "@/lib/demo-data";
 import { fetchProfile, signOut, updateProfile } from "@/services/auth";
+import { fetchNutritionPreferences, saveNutritionPreferences } from "@/services/nutrition";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
