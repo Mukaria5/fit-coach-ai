@@ -217,6 +217,8 @@ function HomePage() {
         </div>
       </Card>
 
+      <NutritionSummaryCard />
+
       <Card title="Nutrition" value={`${nutritionItems.filter((i) => log[i.key]).length} of 4 habits`}>
         <ul className="space-y-2.5">
           {nutritionItems.map((item) => (
