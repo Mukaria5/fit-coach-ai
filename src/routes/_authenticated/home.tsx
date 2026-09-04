@@ -255,3 +255,42 @@ function Card({
     </section>
   );
 }
+
+function NutritionSummaryCard() {
+  const targetsQuery = useQuery({ queryKey: ["nutrition-targets"], queryFn: nutritionTargets });
+  const logsQuery = useQuery({ queryKey: ["nutrition-logs", "today"], queryFn: () => fetchNutritionLogs() });
+
+  const targets = targetsQuery.data;
+  const totals = sumMacros(logsQuery.data ?? []);
+  const calorieTarget = targets?.calories ?? 0;
+  const proteinTarget = targets?.protein_g ?? 0;
+  const budget = targets?.budget_ksh ?? 0;
+
+  const pct = (value: number, target: number) =>
+    target > 0 ? Math.min(100, Math.round((value / target) * 100)) : 0;
+
+  return (
+    <Card
+      title="Kenyan nutrition"
+      value={
+        targetsQuery.isPending
+          ? "Loading your targets…"
+          : `${Math.round(totals.calories)} / ${calorieTarget} kcal · ${Math.round(totals.protein_g)}g protein · KSh ${Math.round(totals.cost_ksh)}`
+      }
+    >
+      <div className="space-y-2">
+        <Progress value={pct(totals.calories, calorieTarget)} className="h-1.5" />
+        <Progress value={pct(totals.protein_g, proteinTarget)} className="h-1.5" />
+        <Progress value={pct(totals.cost_ksh, budget)} className="h-1.5" />
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button asChild size="sm">
+          <Link to="/nutrition">Log food</Link>
+        </Button>
+        <Button asChild size="sm" variant="outline">
+          <Link to="/nutrition">Meal plan</Link>
+        </Button>
+      </div>
+    </Card>
+  );
+}
