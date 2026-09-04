@@ -3,13 +3,12 @@ import type { Database } from "@/integrations/supabase/types";
 import { z } from "zod";
 import { generateText, Output } from "ai";
 
-import { createLovableAiGatewayProvider } from "./ai-gateway.server";
+import { aiModel, withAiErrorHandling } from "./ai/provider.server";
 import { targetsFromProfile, todayISO } from "./score";
 import type { DailyLog, Profile } from "@/types";
 
 type Client = SupabaseClient<Database>;
 
-const MODEL = "google/gemini-3.7-flash";
 
 /* ------------------------------- schemas ------------------------------- */
 
@@ -212,20 +211,16 @@ export function nutritionContextBlock(context: NutritionContext): string {
   ].join("\n");
 }
 
-function gateway() {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) throw new Error("AI coach is not configured");
-  return createLovableAiGatewayProvider(apiKey);
-}
-
 async function structured<T>(system: string, prompt: string, schema: z.ZodType<T>): Promise<T> {
-  const result = await generateText({
-    model: gateway()(MODEL),
-    system,
-    prompt,
-    output: Output.object({ schema: schema as never }),
+  return withAiErrorHandling(async () => {
+    const result = await generateText({
+      model: aiModel(),
+      system,
+      prompt,
+      output: Output.object({ schema: schema as never }),
+    });
+    return (await result.output) as T;
   });
-  return (await result.output) as T;
 }
 
 /* ------------------------------ generators ----------------------------- */
@@ -309,11 +304,11 @@ export async function generateShoppingList(
 
 export async function generateNutritionInsight(context: NutritionContext): Promise<string> {
   const system = [...KENYAN_RULES, "", nutritionContextBlock(context)].join("\n");
-  const result = await generateText({
-    model: gateway()(MODEL),
+  const result = await withAiErrorHandling(() => generateText({
+    model: aiModel(),
     system,
     prompt:
       "In 2-3 short sentences give me today's single most important food action, based on what I've already eaten, my training and my budget. Be specific about a Kenyan food and portion.",
-  });
+  }));
   return result.text.trim();
 }
