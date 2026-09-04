@@ -7,6 +7,7 @@ import { AppShell, ErrorBlock, LoadingBlock } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { askCoach, coachQuickActions, loadCoachHistory } from "@/services/coach";
+import { nutritionQuickPrompts } from "@/services/nutrition";
 import type { CoachMessage } from "@/types";
 
 export const Route = createFileRoute("/_authenticated/coach")({
@@ -60,6 +61,7 @@ function CoachPage() {
         toast.success("Logged from your message");
         await queryClient.invalidateQueries({ queryKey: ["log"] });
         await queryClient.invalidateQueries({ queryKey: ["logs"] });
+        await queryClient.invalidateQueries({ queryKey: ["nutrition-logs"] });
       }
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : "Coach unavailable"),
@@ -90,6 +92,21 @@ function CoachPage() {
                 disabled={send.isPending}
               >
                 {action.label}
+              </Button>
+            ))}
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {nutritionQuickPrompts.map((prompt) => (
+              <Button
+                key={prompt}
+                variant="ghost"
+                size="sm"
+                className="text-xs"
+                onClick={() => submit(prompt)}
+                disabled={send.isPending}
+              >
+                {prompt}
               </Button>
             ))}
           </div>
