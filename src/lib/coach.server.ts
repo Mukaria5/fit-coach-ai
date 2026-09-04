@@ -119,19 +119,16 @@ export async function generateCoachReply(
   systemPrompt: string,
   history: { role: "user" | "assistant"; content: string }[],
 ): Promise<CoachResponse> {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) throw new Error("AI coach is not configured");
+  return withAiErrorHandling(async () => {
+    const result = await generateText({
+      model: aiModel(),
+      system: systemPrompt,
+      messages: history,
+      output: Output.object({ schema: coachResponseSchema }),
+    });
 
-  const gateway = createLovableAiGatewayProvider(apiKey);
-  const result = await generateText({
-    model: gateway("google/gemini-3.7-flash"),
-    system: systemPrompt,
-    messages: history,
-    output: Output.object({ schema: coachResponseSchema }),
+    return (await result.output) as CoachResponse;
   });
-
-  const output = await result.output;
-  return output;
 }
 
 /** Apply AI-extracted updates to today's log. Returns the applied patch. */
