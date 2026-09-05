@@ -17,7 +17,7 @@ import type { LanguageModel } from "ai";
 
 export type AiProviderName = "gemini" | "openai";
 
-const DEFAULT_GEMINI_MODEL = "gemini-2.5-flash";
+const DEFAULT_GEMINI_MODEL = "gemini-3.6-flash";
 const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
 
 /** Friendly error surfaced to the UI — never leaks keys or raw provider output. */
