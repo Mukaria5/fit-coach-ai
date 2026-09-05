@@ -28,12 +28,22 @@ export class AiUnavailableError extends Error {
   }
 }
 
+/** Retired Gemini model ids Google no longer serves, mapped to their replacement. */
+const GEMINI_MODEL_ALIASES: Record<string, string> = {
+  "gemini-1.5-flash": DEFAULT_GEMINI_MODEL,
+  "gemini-1.5-pro": DEFAULT_GEMINI_MODEL,
+  "gemini-2.0-flash": DEFAULT_GEMINI_MODEL,
+  "gemini-2.5-flash": DEFAULT_GEMINI_MODEL,
+  "gemini-2.5-pro": DEFAULT_GEMINI_MODEL,
+};
+
 export function aiConfig(): { provider: AiProviderName; model: string } {
   const provider = (process.env["AI_PROVIDER"] ?? "gemini").toLowerCase() as AiProviderName;
   if (provider === "openai") {
     return { provider, model: process.env["OPENAI_MODEL"] ?? DEFAULT_OPENAI_MODEL };
   }
-  return { provider: "gemini", model: process.env["GEMINI_MODEL"] ?? DEFAULT_GEMINI_MODEL };
+  const configured = process.env["GEMINI_MODEL"]?.trim() || DEFAULT_GEMINI_MODEL;
+  return { provider: "gemini", model: GEMINI_MODEL_ALIASES[configured] ?? configured };
 }
 
 /**
