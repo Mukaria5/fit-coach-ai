@@ -530,6 +530,135 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_deliveries: {
+        Row: {
+          body: string
+          created_at: string
+          dedupe_key: string
+          id: string
+          kind: string
+          local_date: string
+          sent_count: number
+          title: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          dedupe_key: string
+          id?: string
+          kind: string
+          local_date: string
+          sent_count?: number
+          title: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          dedupe_key?: string
+          id?: string
+          kind?: string
+          local_date?: string
+          sent_count?: number
+          title?: string
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notification_preferences: {
+        Row: {
+          breakfast_time: string
+          created_at: string
+          daily_briefing_enabled: boolean
+          daily_briefing_time: string
+          dinner_time: string
+          enabled: boolean
+          evening_checkin_enabled: boolean
+          evening_checkin_time: string
+          id: string
+          lunch_time: string
+          meal_enabled: boolean
+          nutrition_enabled: boolean
+          quiet_hours_end: string
+          quiet_hours_start: string
+          sleep_enabled: boolean
+          sleep_time: string
+          streak_enabled: boolean
+          timezone: string
+          updated_at: string
+          user_id: string
+          water_enabled: boolean
+          water_interval_hours: number
+          weekly_review_dow: number
+          weekly_review_enabled: boolean
+          weekly_review_time: string
+          workout_enabled: boolean
+          workout_time: string
+        }
+        Insert: {
+          breakfast_time?: string
+          created_at?: string
+          daily_briefing_enabled?: boolean
+          daily_briefing_time?: string
+          dinner_time?: string
+          enabled?: boolean
+          evening_checkin_enabled?: boolean
+          evening_checkin_time?: string
+          id?: string
+          lunch_time?: string
+          meal_enabled?: boolean
+          nutrition_enabled?: boolean
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          sleep_enabled?: boolean
+          sleep_time?: string
+          streak_enabled?: boolean
+          timezone?: string
+          updated_at?: string
+          user_id: string
+          water_enabled?: boolean
+          water_interval_hours?: number
+          weekly_review_dow?: number
+          weekly_review_enabled?: boolean
+          weekly_review_time?: string
+          workout_enabled?: boolean
+          workout_time?: string
+        }
+        Update: {
+          breakfast_time?: string
+          created_at?: string
+          daily_briefing_enabled?: boolean
+          daily_briefing_time?: string
+          dinner_time?: string
+          enabled?: boolean
+          evening_checkin_enabled?: boolean
+          evening_checkin_time?: string
+          id?: string
+          lunch_time?: string
+          meal_enabled?: boolean
+          nutrition_enabled?: boolean
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          sleep_enabled?: boolean
+          sleep_time?: string
+          streak_enabled?: boolean
+          timezone?: string
+          updated_at?: string
+          user_id?: string
+          water_enabled?: boolean
+          water_interval_hours?: number
+          weekly_review_dow?: number
+          weekly_review_enabled?: boolean
+          weekly_review_time?: string
+          workout_enabled?: boolean
+          workout_time?: string
+        }
+        Relationships: []
+      }
       nutrition_logs: {
         Row: {
           calories: number
@@ -704,6 +833,45 @@ export type Database = {
           weight_kg?: number | null
           workout_location?: string | null
           workout_minutes?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          p256dh: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          p256dh: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          p256dh?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
         }
         Relationships: []
       }
