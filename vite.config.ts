@@ -49,6 +49,8 @@ export default defineConfig({
         },
         workbox: {
           globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
+          // Push + notification-click handlers live in public/push-sw.js.
+          importScripts: ["/push-sw.js"],
           navigateFallback: "/",
           // Auth callbacks, API routes and OAuth must always hit the network.
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
