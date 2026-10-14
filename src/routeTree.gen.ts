@@ -21,6 +21,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedWorkoutsRouteImport } from './routes/_authenticated/workouts'
+import { Route as ApiPublicNotificationsDispatchRouteImport } from './routes/api/public/notifications/dispatch'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -81,6 +82,12 @@ const AuthenticatedWorkoutsRoute = AuthenticatedWorkoutsRouteImport.update({
   path: '/workouts',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicNotificationsDispatchRoute =
+  ApiPublicNotificationsDispatchRouteImport.update({
+    id: '/api/public/notifications/dispatch',
+    path: '/api/public/notifications/dispatch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/workouts': typeof AuthenticatedWorkoutsRoute
+  '/api/public/notifications/dispatch': typeof ApiPublicNotificationsDispatchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/workouts': typeof AuthenticatedWorkoutsRoute
+  '/api/public/notifications/dispatch': typeof ApiPublicNotificationsDispatchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/workouts': typeof AuthenticatedWorkoutsRoute
+  '/api/public/notifications/dispatch': typeof ApiPublicNotificationsDispatchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/progress'
     | '/workouts'
+    | '/api/public/notifications/dispatch'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/progress'
     | '/workouts'
+    | '/api/public/notifications/dispatch'
   id:
     | '__root__'
     | '/'
@@ -164,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/progress'
     | '/_authenticated/workouts'
+    | '/api/public/notifications/dispatch'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +184,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicNotificationsDispatchRoute: typeof ApiPublicNotificationsDispatchRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -259,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWorkoutsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/notifications/dispatch': {
+      id: '/api/public/notifications/dispatch'
+      path: '/api/public/notifications/dispatch'
+      fullPath: '/api/public/notifications/dispatch'
+      preLoaderRoute: typeof ApiPublicNotificationsDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -292,6 +313,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicNotificationsDispatchRoute: ApiPublicNotificationsDispatchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
