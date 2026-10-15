@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { AppShell, ErrorBlock, LoadingBlock } from "@/components/app-shell";
 import { ProgressRing } from "@/components/progress-ring";
+import { EnableRemindersCard } from "@/components/reminders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -89,6 +90,9 @@ function HomePage() {
 
   return (
     <AppShell title={greeting(profile?.name)} subtitle={scoreLabel(score)}>
+      <div className="mb-3">
+        <EnableRemindersCard />
+      </div>
       <section className="surface flex flex-col items-center gap-4 px-5 py-7">
         <ProgressRing value={score} caption="daily score" />
         <div className="grid w-full grid-cols-5 gap-2 text-center">
