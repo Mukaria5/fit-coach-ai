@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { AppShell, ErrorBlock, LoadingBlock } from "@/components/app-shell";
+import { ReminderSettingsSection } from "@/components/reminders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -162,6 +163,8 @@ function ProfilePage() {
             </div>
           </div>
         </section>
+
+        <ReminderSettingsSection />
 
         <NutritionPreferencesSection />
 

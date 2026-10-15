@@ -219,6 +219,21 @@ export type Database = {
         }
         Relationships: []
       }
+      dispatch_tokens: {
+        Row: {
+          created_at: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          token?: string
+        }
+        Relationships: []
+      }
       food_categories: {
         Row: {
           created_at: string
@@ -1039,7 +1054,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      verify_dispatch_token: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
