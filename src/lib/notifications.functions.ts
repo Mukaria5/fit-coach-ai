@@ -64,7 +64,7 @@ export const saveNotificationPreferences = createServerFn({ method: "POST" })
     const { error } = await context.supabase
       .from("notification_preferences")
       .upsert(
-        { ...data, user_id: context.userId },
+        { ...data, user_id: context.userId } as never,
         { onConflict: "user_id" },
       );
     if (error) throw new Error("Could not save reminder settings");
